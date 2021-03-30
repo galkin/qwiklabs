@@ -1,0 +1,39 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: sample-frontend-production
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sample
+  template:
+    metadata:
+      name: frontend
+      labels:
+        app: sample
+        role: frontend
+        env: production
+    spec:
+      containers:
+      - name: frontend
+        image: gcr.io/qwiklabs-resources/sample-app:v1.0.0
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "100m"
+        imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+        env:
+        - name: COMPONENT
+          value: frontend
+        - name: BACKEND_URL
+          value: http://sample-backend-production:8080/metadata
+        - name: VERSION
+          value: production
+        ports:
+        - name: frontend
+          containerPort: 8080
