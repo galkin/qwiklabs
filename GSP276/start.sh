@@ -36,4 +36,5 @@ ssh-keygen -b 2048 -t rsa -f ~/.ssh/google_compute_engine -q -N ""
 gcloud compute ssh --command="sudo apt install -y netcat" --zone=us-central1-a agones-test-vm
 PORT=$(kubectl get gs -o=jsonpath='{$..port}')
 HOST=$(kubectl get gs -o=jsonpath='{$..address}')
+echo "nc -u $HOST $PORT"
 gcloud compute ssh --command="echo EXIT | nc -u $HOST $PORT" --zone=us-central1-a agones-test-vm
